@@ -1,7 +1,7 @@
 import java.util.concurrent.*;
 
 
-public class Main {
+public class FutureTask {
 
     public static Integer factorial(int n)
     {
@@ -25,10 +25,6 @@ public class Main {
     public static void main(String [] args) throws ExecutionException, InterruptedException {
         Integer t = task();
     }
-
-
-
-
 
     public static Integer task() throws ExecutionException, InterruptedException {
         ExecutorService executor = Executors.newFixedThreadPool(4);
