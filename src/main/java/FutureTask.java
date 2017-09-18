@@ -36,65 +36,31 @@ public class FutureTask {
 
     public static Integer task() throws ExecutionException, InterruptedException {
         ExecutorService executor = Executors.newFixedThreadPool(4);
-//
-//        Callable<Integer> task1 = () -> {
-//                System.out.println("Run task1");
-//                TimeUnit.SECONDS.sleep(2);
-//                return factorial(10);
-//        };
-//        Future<Integer> future1 = executor.submit(task1);
-//
-//        Callable<Integer> task2 = () -> {
-//            System.out.println("Run task2");
-//            Integer sum = sum(150);
-//            sum += future1.get();
-//            return sum;
-//        };
-//        Future<Integer> future2 = executor.submit(task2);
-//
-//        Callable<Integer> task3 = () -> {
-//            System.out.println("Run task3");
-//            return factorial(3);
-//        };
-//        Future<Integer> future3 = executor.submit(task3);
-//
-//        Callable<Integer> task4 = () -> {
-//            System.out.println("Run task4");
-//            return future3.get() + future2.get();
-//        };
-//        Future<Integer> future4 = executor.submit(task4);
-//
-//        Integer result = future4.get();
-        
         
         CompletableFuture<Integer> cf1 = CompletableFuture.supplyAsync(() -> {
             System.out.println("Run task1");
-//            TimeUnit.SECONDS.sleep(2);
-            return 5;//factorial(5);
+            try {
+                TimeUnit.SECONDS.sleep(2);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return factorial(15);
         }, executor);
-
-   //     CompletableFuture<Integer> cf2 = cf1.thenRun(() -> {System.out.println("r t 2");}).thenApply(f -> f + sum(5));
         CompletableFuture<Integer> cf2 = cf1.thenApply(f -> {
-        	return f + sum(3);
+            System.out.println("Run task2");
+        	return f + sum(500);
         });   
         CompletableFuture<Integer> cf3 = CompletableFuture.supplyAsync(() -> {
             System.out.println("Run task3");
-            return 10;//factorial(4);
+            return factorial(24);
         }, executor);
-        
-        CompletableFuture<Integer> cf4 = cf2.thenApply(f -> {
-			try {
-				return f + cf3.get();
-			} catch (InterruptedException | ExecutionException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			return f;
-		});
 
+        CompletableFuture<Integer> cf4 =cf2.thenCombine(cf3, (f3, f2) -> {
+             System.out.println("Run task4");
+             return f3 + f2;
+        });
         Integer result = cf4.get();
-        
-        System.out.println("result: " + result); //5! + 5+ +4! = 159
+        System.out.println("result: " + result);
         return result;
     }
 
