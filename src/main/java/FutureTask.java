@@ -11,7 +11,7 @@ import java.util.concurrent.*;
 
 public class FutureTask {
 
-    public static Integer factorial(int n)
+    private static Integer factorial(int n)
     {
         Integer ret = 0;
         for (int i = 1; i <= n; ++i)
@@ -19,7 +19,7 @@ public class FutureTask {
         return ret;
     }
 
-    public static Integer sum(int n)
+    private static Integer sum(int n)
     {
         Integer sum = 0;
         Integer i = 0;
